@@ -63,6 +63,28 @@ public class Animals extends GeneralAnimal implements DatabaseManager {
     }
   }
 
+  public List<Sightings> getSightings() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT sightings.* FROM general_animals " +
+                   "JOIN animals_sightings ON (general_animals.id = animals_sightings.general_animal_id) " +
+                   "JOIN sightings ON (animals_sightings.sighting_id = sightings.id) " +
+                   "WHERE general_animals.id = :id";
+      return con.createQuery(sql)
+                .addParameter("id", id)
+                .executeAndFetch(Sightings.class);
+    }
+  }
+
+  public void leaveSighting(Sightings sighting) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM animals_sightings WHERE sighting_id = :sighting_id AND general_animal_id = :general_animal_id";
+      con.createQuery(sql)
+        .addParameter("sighting_id", sighting.getId())
+        .addParameter("general_animal_id", this.id())
+        .executeUpdate();
+    }
+  }
+
   @Override
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
@@ -70,6 +92,10 @@ public class Animals extends GeneralAnimal implements DatabaseManager {
       con.createQuery(sql)
       .addParameter("id", this.id)
       .executeUpdate();
+      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animals_id = :id";
+      con.createQuery(joinDeleteQuery)
+        .addParameter("id", this.id())
+        .executeUpdate();
     }
   }
 
