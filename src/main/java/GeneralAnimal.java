@@ -37,16 +37,16 @@ public abstract class GeneralAnimal {
     }
   }
 
-  public void delete() {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "DELETE FROM general_animals WHERE id = :id";
-      con.createQuery(sql)
-        .addParameter("id", this.id)
-        .executeUpdate();
-      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
-      con.createQuery(joinDeleteQuery)
-        .addParameter("newid", this.id)
-        .executeUpdate();
-    }
-  }
+  // public void delete() {
+  //   try(Connection con = DB.sql2o.open()) {
+  //     String sql = "DELETE FROM general_animals WHERE id = :id";
+  //     con.createQuery(sql)
+  //       .addParameter("id", this.id)
+  //       .executeUpdate();
+  //     String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
+  //     con.createQuery(joinDeleteQuery)
+  //       .addParameter("newid", this.id)
+  //       .executeUpdate();
+  //   }
+  
 }

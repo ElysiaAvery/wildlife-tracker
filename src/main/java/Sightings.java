@@ -137,6 +137,20 @@ public class Sightings implements DatabaseManagement {
     }
   }
 
+  public void update(String location, String ranger_name) {
+    this.location = location;
+    this.ranger_name = ranger_name;
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE sightings SET location = :location, ranger_name = :ranger_name WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", this.id)
+        .addParameter("location", location)
+        .addParameter("ranger_name", ranger_name)
+        .throwOnMappingFailure(false)
+        .executeUpdate();
+    }
+  }
+
   public void removeEndangeredAnimal(EndangeredAnimals animal) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "DELETE FROM animals_sightings WHERE general_animal_id = :id AND sighting_id = :sighting_id";

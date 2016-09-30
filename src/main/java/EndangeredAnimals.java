@@ -6,6 +6,12 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
   private String health;
   private String age;
   private int amount;
+  public static final String NEWBORN = "newborn";
+  public static final String YOUNG = "young";
+  public static final String ADULT = "adult";
+  public static final String ILL = "ill";
+  public static final String OKAY = "okay";
+  public static final String WELL = "well";
   public static final String DATABASE_TYPE = "endangered";
   public EndangeredAnimals(String name, String health, String age, int amount) {
     this.name = name;
@@ -74,15 +80,17 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
   //   }
   // }
 
-  public void update() {
+  public void update(String name, String health, String age) {
+    this.name = name;
+    this.health = health;
+    this.age = age;
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE general_animals SET name = :name, health = :health, age = :age, amount = :amount WHERE id = :id";
+      String sql = "UPDATE general_animals SET name = :name, health = :health, age = :age WHERE id = :id";
       con.createQuery(sql)
         .addParameter("id", this.id)
-        .addParameter("name", this.name)
-        .addParameter("health", this.health)
-        .addParameter("age", this.age)
-        .addParameter("amount", this.amount)
+        .addParameter("name", name)
+        .addParameter("health", health)
+        .addParameter("age", age)
         .throwOnMappingFailure(false)
         .executeUpdate();
     }
@@ -110,19 +118,19 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
     }
   }
 
-  // @Override
-  // public void delete() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "DELETE FROM general_animals WHERE id = :id";
-  //     con.createQuery(sql)
-  //     .addParameter("id", this.id)
-  //     .executeUpdate();
-  //     String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animals_id = :id";
-  //     con.createQuery(joinDeleteQuery)
-  //       .addParameter("id", this.getId())
-  //       .executeUpdate();
-  //   }
-  // }
+  @Override
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM general_animals WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("id", this.id)
+      .executeUpdate();
+      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animals_id = :newid";
+      con.createQuery(joinDeleteQuery)
+        .addParameter("newid", this.getId())
+        .executeUpdate();
+    }
+  }
 
   @Override
   public boolean equals(Object otherEndangeredAnimal) {

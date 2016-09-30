@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 public class Animals extends GeneralAnimal implements DatabaseManagement {
   public static final String DATABASE_TYPE = "animal";
   private String age;
+  public static final String NEWBORN = "newborn";
+  public static final String YOUNG = "young";
+  public static final String ADULT = "adult";
 
   public Animals(String name, String age) {
     this.name = name;
@@ -16,7 +19,7 @@ public class Animals extends GeneralAnimal implements DatabaseManagement {
     return age;
   }
 
-  public void setAge() {
+  public void setAge(String age) {
     this.age = age;
   }
 
@@ -53,13 +56,15 @@ public class Animals extends GeneralAnimal implements DatabaseManagement {
   //   }
   // }
 
-  public void update() {
+  public void update(String name, String age) {
+    this.name = name;
+    this.age = age;
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE general_animals SET name = :name, age = :age WHERE id = :id";
       con.createQuery(sql)
         .addParameter("id", this.id)
-        .addParameter("name", this.name)
-        .addParameter("age", this.age)
+        .addParameter("name", name)
+        .addParameter("age", age)
         .throwOnMappingFailure(false)
         .executeUpdate();
     }
@@ -87,19 +92,19 @@ public class Animals extends GeneralAnimal implements DatabaseManagement {
     }
   }
 
-  // @Override
-  // public void delete() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "DELETE FROM general_animals WHERE id = :id";
-  //     con.createQuery(sql)
-  //     .addParameter("id", this.id)
-  //     .executeUpdate();
-  //     String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
-  //     con.createQuery(joinDeleteQuery)
-  //       .addParameter("newid", this.id)
-  //       .executeUpdate();
-  //   }
-  // }
+  @Override
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM general_animals WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("id", this.id)
+      .executeUpdate();
+      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
+      con.createQuery(joinDeleteQuery)
+        .addParameter("newid", this.id)
+        .executeUpdate();
+    }
+  }
 
   @Override
   public boolean equals(Object otherAnimal) {
