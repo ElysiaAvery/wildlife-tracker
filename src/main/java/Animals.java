@@ -2,11 +2,11 @@ import java.util.List;
 import org.sql2o.*;
 import java.sql.Timestamp;
 
-public class Animals extends GeneralAnimal implements DatabaseManager {
+public class Animals extends GeneralAnimal implements DatabaseManagement {
   public static final String DATABASE_TYPE = "animal";
   private String age;
 
-  public EndangeredAnimals(String name, String age) {
+  public Animals(String name, String age) {
     this.name = name;
     this.age = age;
     type = DATABASE_TYPE;
@@ -40,17 +40,18 @@ public class Animals extends GeneralAnimal implements DatabaseManager {
     }
   }
 
-  @Override
-  public void save() {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO general_animals (type, name, age) VALUES ('animal', :name, :age)";
-      this.id = (int) con.createQuery(sql, true)
-        .addParameter("name", this.name)
-        .addParameter("age", this.age)
-        .executeUpdate()
-        .getKey();
-    }
-  }
+  // @Override
+  // public void save() {
+  //   try(Connection con = DB.sql2o.open()) {
+  //     String sql = "INSERT INTO general_animals (type, name, age) VALUES ('animal', :name, :age)";
+  //     this.id = (int) con.createQuery(sql, true)
+  //       .addParameter("name", this.name)
+  //       .addParameter("age", this.age)
+  //       .throwOnMappingFailure(false)
+  //       .executeUpdate()
+  //       .getKey();
+  //   }
+  // }
 
   public void update() {
     try(Connection con = DB.sql2o.open()) {
@@ -59,6 +60,7 @@ public class Animals extends GeneralAnimal implements DatabaseManager {
         .addParameter("id", this.id)
         .addParameter("name", this.name)
         .addParameter("age", this.age)
+        .throwOnMappingFailure(false)
         .executeUpdate();
     }
   }
@@ -70,34 +72,34 @@ public class Animals extends GeneralAnimal implements DatabaseManager {
                    "JOIN sightings ON (animals_sightings.sighting_id = sightings.id) " +
                    "WHERE general_animals.id = :id";
       return con.createQuery(sql)
-                .addParameter("id", id)
+                .addParameter("id", this.id)
                 .executeAndFetch(Sightings.class);
     }
   }
 
-  public void leaveSighting(Sightings sighting) {
+  public void leaveSightings(Sightings sighting) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "DELETE FROM animals_sightings WHERE sighting_id = :sighting_id AND general_animal_id = :general_animal_id";
       con.createQuery(sql)
         .addParameter("sighting_id", sighting.getId())
-        .addParameter("general_animal_id", this.id())
+        .addParameter("general_animal_id", this.getId())
         .executeUpdate();
     }
   }
 
-  @Override
-  public void delete() {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "DELETE FROM general_animals WHERE id = :id";
-      con.createQuery(sql)
-      .addParameter("id", this.id)
-      .executeUpdate();
-      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animals_id = :id";
-      con.createQuery(joinDeleteQuery)
-        .addParameter("id", this.id())
-        .executeUpdate();
-    }
-  }
+  // @Override
+  // public void delete() {
+  //   try(Connection con = DB.sql2o.open()) {
+  //     String sql = "DELETE FROM general_animals WHERE id = :id";
+  //     con.createQuery(sql)
+  //     .addParameter("id", this.id)
+  //     .executeUpdate();
+  //     String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
+  //     con.createQuery(joinDeleteQuery)
+  //       .addParameter("newid", this.id)
+  //       .executeUpdate();
+  //   }
+  // }
 
   @Override
   public boolean equals(Object otherAnimal) {

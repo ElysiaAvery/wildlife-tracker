@@ -6,84 +6,84 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.text.DateFormat;
 
-public class SightingTest {
+public class SightingsTest {
 
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
   @Test
   public void sighting_instantiatesCorrectly_true() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    assertTrue(testSighting instanceof Sighting);
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    assertTrue(testSightings instanceof Sightings);
   }
 
   @Test
   public void getLocation_instantiatesCorrectlyWithLocation_true() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    assertEquals("Quadrant A", testSighting.getLocation());
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    assertEquals("Quadrant A", testSightings.getLocation());
   }
 
   @Test
   public void getRangerName_instantiatesCorrectlyWithRangerName_true() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    assertEquals("Naomi", testSighting.getRangerName());
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    assertEquals("Naomi", testSightings.getRangerName());
   }
 
   @Test
   public void equals_returnsTrueIfLocationAndRangerNameAreSame_True() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    Sighting anotherSighting = new Sighting("Quadrant A", "Naomi");
-    assertTrue(testSighting.equals(anotherSighting));
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    Sightings anotherSightings = new Sightings("Quadrant A", "Naomi");
+    assertTrue(testSightings.equals(anotherSightings));
   }
 
   @Test
-  public void save_addsSightingToDatabase() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    testSighting.save();
-    assertTrue(Sighting.all().get(0).equals(testSighting));
+  public void save_addsSightingsToDatabase() {
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    testSightings.save();
+    assertTrue(Sightings.all().get(0).equals(testSightings));
   }
 
   @Test
   public void save_assignsIdToObject_true() {
-    Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-    testSighting.save();
-    Sighting savedSighting = Sighting.all().get(0);
-    assertEquals(savedSighting.getId(), testSighting.getId());
+    Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+    testSightings.save();
+    Sightings savedSightings = Sightings.all().get(0);
+    assertEquals(savedSightings.getId(), testSightings.getId());
   }
 
   @Test
-  public void all_returnsAllInstancesOfSighting_true() {
-    Sighting firstSighting = new Sighting("Quadrant A", "Naomi");
-    firstSighting.save();
-    Sighting secondSighting = new Sighting("Sparkles", 1);
-    secondSighting.save();
-    assertEquals(true, Sighting.all().get(0).equals(firstSighting));
-    assertEquals(true, Sighting.all().get(1).equals(secondSighting));
+  public void all_returnsAllInstancesOfSightings_true() {
+    Sightings firstSightings = new Sightings("Quadrant A", "Naomi");
+    firstSightings.save();
+    Sightings secondSightings = new Sightings("Quadrant C", "Peter");
+    secondSightings.save();
+    assertEquals(true, Sightings.all().get(0).equals(firstSightings));
+    assertEquals(true, Sightings.all().get(1).equals(secondSightings));
   }
 
   @Test
-  public void find_returnsSightingWithSameId_secondSighting() {
-    Sighting firstSighting = new Sighting("Quadrant A", "Naomi");
-    firstSighting.save();
-    Sighting secondSighting = new Sighting("Quadrant C", "Peter");
-    secondSighting.save();
-    assertEquals(Sighting.find(secondSighting.getId()), secondSighting);
+  public void find_returnsSightingsWithSameId_secondSightings() {
+    Sightings firstSightings = new Sightings("Quadrant A", "Naomi");
+    firstSightings.save();
+    Sightings secondSightings = new Sightings("Quadrant C", "Peter");
+    secondSightings.save();
+    assertEquals(Sightings.find(secondSightings.getId()), secondSightings);
   }
 
    @Test
    public void save_recordsTimeOfCreationInDatabase() {
-     Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-     testSighting.save();
-     Timestamp savedSighting = Sighting.find(testSighting.getId()).getCreation();
+     Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+     testSightings.save();
+     Timestamp savedSightings = Sightings.find(testSightings.getId()).getSpotted();
      Timestamp rightNow = new Timestamp(new Date().getTime());
-     assertEquals(rightNow.getDay(), savedSighting.getDay());
+     assertEquals(rightNow.getDay(), savedSightings.getDay());
    }
 
    @Test
-   public void delete_deletesSighting_true() {
-     Sighting testSighting = new Sighting("Quadrant A", "Naomi");
-     testSighting.save();
-     testSighting.delete();
-     assertEquals(null, Sighting.find(testSighting.getId()));
+   public void delete_deletesSightings_true() {
+     Sightings testSightings = new Sightings("Quadrant A", "Naomi");
+     testSightings.save();
+     testSightings.delete();
+     assertEquals(null, Sightings.find(testSightings.getId()));
    }
 }

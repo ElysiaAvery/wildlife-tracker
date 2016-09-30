@@ -43,6 +43,10 @@ public abstract class GeneralAnimal {
       con.createQuery(sql)
         .addParameter("id", this.id)
         .executeUpdate();
+      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
+      con.createQuery(joinDeleteQuery)
+        .addParameter("newid", this.id)
+        .executeUpdate();
     }
   }
 }
