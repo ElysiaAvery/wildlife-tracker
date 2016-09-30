@@ -20,4 +20,17 @@ public class Sightings implements DatabaseManager {
     return ranger_name;
   }
 
+  @Override
+  public boolean equals(Object otherSighting) {
+    if (!(otherSighting instanceof Sightings)) {
+      return false;
+    } else {
+      Sightings newSighting = (Sightings) otherSighting;
+      return this.getLocation().equals(newSighting.getLocation()) &&
+             this.getRangerName().equals(newSighting.getRangerName());
+    }
+  }
+
+  
+
 }
