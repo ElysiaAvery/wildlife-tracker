@@ -6,7 +6,7 @@ public abstract class GeneralAnimal {
   public String name;
   public String type;
   public int id;
-  public int sightingId;
+  // public int sightingId;
 
 
   public String getName() {
@@ -17,9 +17,9 @@ public abstract class GeneralAnimal {
     return id;
   }
 
-  public int getSightingId() {
-    return personId;
-  }
+  // public int getSightingId() {
+  //   return personId;
+  // }
 
   @Override
   public boolean equals(Object otherGeneralAnimal) {
@@ -27,17 +27,17 @@ public abstract class GeneralAnimal {
       return false;
     } else {
       GeneralAnimal newGeneralAnimal = (GeneralAnimal) otherGeneralAnimal;
-      return this.getName().equals(newGeneralAnimal.getName()) &&
-             this.getSightingId() == newGeneralAnimal.getSightingId();
+      return this.getName().equals(newGeneralAnimal.getName());
+            //  this.getSightingId() == newGeneralAnimal.getSightingId();
     }
   }
 
   public void save() {
     try (Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO general_animals (name, sightingId, type) VALUES (:name, :sightingId, :type)";
+      String sql = "INSERT INTO general_animals (name, type) VALUES (:name, :type)";
       this.id = (int) con.createQuery(sql, true)
                          .addParameter("name", this.name)
-                         .addParameter("sightingId", this.sightingId)
+                        //  .addParameter("sightingId", this.sightingId)
                          .addParameter("type", this.type)
                          .executeUpdate()
                          .getKey();

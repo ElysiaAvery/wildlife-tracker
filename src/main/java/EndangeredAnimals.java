@@ -5,11 +5,31 @@ import java.sql.Timestamp;
 public class EndangeredAnimals implements GeneralAnimal extends DatabaseManager {
   private String health;
   private String age;
+  private int amount;
   public static final String DATABASE_TYPE = "endangered";
-  public static final String DATABASE_HEALTHY = "healthy";
-  public static final String DATABASE_ILL = "ill";
-  public static final String DATABASE_OKAY = "okay";
-  public static final String DATABASE_NEWBORN = "newborn";
-  public static final String DATABASE_YOUNG = "young";
-  public static final String DATABASE_AADULT = "adult";
+  public static final String HEALTHY = "healthy";
+  public static final String ILL = "ill";
+  public static final String OKAY = "okay";
+  public static final String NEWBORN = "newborn";
+  public static final String YOUNG = "young";
+  public static final String ADULT = "adult";
+  public EndangeredAnimals(String health, String age, int amount) {
+    this.health = health;
+    this.age = age;
+    this.amount = amount;
+  }
+
+  public String getHealth() {
+    return health;
+  }
+
+  public String getAge() {
+    return age;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public boolean
 }
