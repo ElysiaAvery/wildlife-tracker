@@ -7,18 +7,11 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
   private String age;
   private int amount;
   public static final String DATABASE_TYPE = "endangered";
-  // public static final int MED_HEALTH = 2;
-  // public static final int MAX_HEALTH = 3;
-  // // public static final String MIN_AGE = 1;
-  // public static final String MAX_AGE = 3;
-  // public static final int MIN = 0;
   public EndangeredAnimals(String name, String health, String age, int amount) {
     this.name = name;
     this.health = health;
     this.age = age;
     this.amount = amount;
-    // animalHealth = MAX_HEALTH;
-    // animalAge = MAX_AGE;
     type = DATABASE_TYPE;
   }
 
@@ -45,13 +38,6 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
   public void setAmount() {
     this.amount = amount;
   }
-
-  // public boolean healthCondition() {
-  //   if (animalHealth < MED_HEALTH) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
 
   public static List<EndangeredAnimals> all() {
     String sql = "SELECT * FROM general_animals WHERE type = 'endangered';";
