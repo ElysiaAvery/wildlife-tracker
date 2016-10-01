@@ -163,9 +163,9 @@ public class App {
 
     post("/endangered-animals/:id/delete", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      EndangeredAnimals animalId = EndangeredAnimals.find(Integer.parseInt(request.params(":id")));
+      EndangeredAnimals animal = EndangeredAnimals.find(Integer.parseInt(request.params(":id")));
       // Sightings sighting = Sightings.find(animalId.getId());
-      animalId.delete();
+      animal.delete();
       // animalId.leaveSightings(sighting);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-delete.vtl");
