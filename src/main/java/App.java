@@ -23,15 +23,16 @@ public class App {
     post("/sightings", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       String location = request.queryParams("location");
+      String url = String.format("/whoops");
+      if(location == null) {
+        throw new UnsupportedOperationException("You need to enter a Location!");
+      } response.redirect(url);
       String rangerName = request.queryParams("ranger_name");
-      Animals animal = Animals.find(Integer.parseInt(request.queryParams("animalId")));
-      EndangeredAnimals endangeredAnimal = EndangeredAnimals.find(Integer.parseInt(request.queryParams("endangered-animalId")));
+      if(rangerName == null) {
+          throw new UnsupportedOperationException("You need to enter a Name!");
+        } response.redirect(url);
       Sightings newSighting = new Sightings(location, rangerName);
       newSighting.save();
-      newSighting.addAnimals(animal);
-      newSighting.addEndangeredAnimals(endangeredAnimal);
-      // model.put("animal", newSighting.addAnimals(animal));
-      // model.put("endangered-animal", newSighting.addEndangeredAnimals(endangeredAnimal));
       model.put("spotted", newSighting.getSpotted());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting-success.vtl");
@@ -74,7 +75,11 @@ public class App {
 
     post("/animals", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
+      String url = String.format("/whoops");
       String animalName = request.queryParams("animal-name");
+        if(animalName == null) {
+          throw new UnsupportedOperationException("You need to enter a Species!");
+        } response.redirect(url);
       String age = request.queryParams("animal-age");
       // Sightings sighting = Sightings.find(Integer.parseInt(request.queryParams("sightingId")));
       Animals newAnimal = new Animals(animalName, age);
@@ -164,6 +169,13 @@ public class App {
       // animalId.leaveSightings(sighting);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-delete.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/whoops", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("header", "templates/header.vtl");
+      model.put("template", "templates/whoops.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

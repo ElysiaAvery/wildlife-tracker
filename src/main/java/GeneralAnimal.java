@@ -48,5 +48,5 @@ public abstract class GeneralAnimal {
   //       .addParameter("newid", this.id)
   //       .executeUpdate();
   //   }
-  
+
 }
