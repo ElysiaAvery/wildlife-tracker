@@ -161,8 +161,6 @@ ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq
 --
 
 COPY animals_sightings (id, sighting_id, general_animal_id) FROM stdin;
-4	10	11
-5	10	13
 \.
 
 
@@ -170,7 +168,7 @@ COPY animals_sightings (id, sighting_id, general_animal_id) FROM stdin;
 -- Name: animals_sightings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('animals_sightings_id_seq', 5, true);
+SELECT pg_catalog.setval('animals_sightings_id_seq', 13, true);
 
 
 --
@@ -178,6 +176,12 @@ SELECT pg_catalog.setval('animals_sightings_id_seq', 5, true);
 --
 
 COPY general_animals (id, type, name, health, age, amount) FROM stdin;
+35	animal	chickadee	\N	Newborn	\N
+36	animal	bluejay	\N	Young	\N
+37	animal	osprey	\N	Adult	\N
+38	animal	elk	\N	Young	\N
+39	endangered	grey wolf	Ill	Young	2
+40	endangered	bee	Ill	Young	3
 \.
 
 
@@ -185,7 +189,7 @@ COPY general_animals (id, type, name, health, age, amount) FROM stdin;
 -- Name: general_animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('general_animals_id_seq', 13, true);
+SELECT pg_catalog.setval('general_animals_id_seq', 40, true);
 
 
 --
@@ -200,7 +204,7 @@ COPY sightings (id, location, ranger_name, spotted) FROM stdin;
 -- Name: sightings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('sightings_id_seq', 10, true);
+SELECT pg_catalog.setval('sightings_id_seq', 48, true);
 
 
 --

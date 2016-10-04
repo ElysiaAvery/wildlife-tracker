@@ -81,7 +81,6 @@ public class App {
           throw new UnsupportedOperationException("You need to enter a Species!");
         }
       String age = request.queryParams("animal-age");
-      Sightings sighting = Sightings.find(Integer.parseInt(request.queryParams("sightingId")));
       Animals newAnimal = new Animals(animalName, age);
       newAnimal.save();
       model.put("sightings", newAnimal.getSightings());
