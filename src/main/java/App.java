@@ -23,16 +23,15 @@ public class App {
     post("/sightings", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       String location = request.queryParams("location");
-      String url = String.format("/whoops");
-      if(location == null) {
-        throw new UnsupportedOperationException("You need to enter a Location!");
-      } response.redirect(url);
       String rangerName = request.queryParams("ranger_name");
-      if(rangerName == null) {
-          throw new UnsupportedOperationException("You need to enter a Name!");
-        } response.redirect(url);
+      String url = String.format("/whoops");
+      if(location.equals("") || rangerName.equals("")) {
+        response.redirect(url);
+        throw new Exception("You need to enter more information!");
+      }
       Sightings newSighting = new Sightings(location, rangerName);
       newSighting.save();
+      model.put("sightings", Sightings.all());
       model.put("spotted", newSighting.getSpotted());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting-success.vtl");
@@ -43,6 +42,8 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       Sightings sightingId = Sightings.find(Integer.parseInt(request.params(":id")));
       model.put("sighting", sightingId);
+      // model.put("animal", sightingId.getAnimals());
+      // model.put("endangered-animal", sightingId.getEndangeredAnimals());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting.vtl");
       return new ModelAndView(model, layout);
@@ -63,11 +64,7 @@ public class App {
     post("/sightings/:id/delete", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Sightings sightingId = Sightings.find(Integer.parseInt(request.params(":id")));
-      // Animals animal = Animals.find(sightingId.getId());
-      // EndangeredAnimals otherAnimal = EndangeredAnimals.find(sightingId.getId());
       sightingId.delete();
-      // sightingId.removeAnimal(animal);
-      // sightingId.removeEndangeredAnimal(otherAnimal);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting-delete.vtl");
       return new ModelAndView(model, layout);
@@ -77,14 +74,16 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       String url = String.format("/whoops");
       String animalName = request.queryParams("animal-name");
-        if(animalName == null) {
+        if(animalName.equals("")) {
+          response.redirect(url);
           throw new UnsupportedOperationException("You need to enter a Species!");
-        } response.redirect(url);
+        }
       String age = request.queryParams("animal-age");
-      // Sightings sighting = Sightings.find(Integer.parseInt(request.queryParams("sightingId")));
+      Sightings sighting = Sightings.find(Integer.parseInt(request.queryParams("sightingId")));
       Animals newAnimal = new Animals(animalName, age);
       newAnimal.save();
-      // newAnimal.getSightings(sighting);
+      model.put("sightings", newAnimal.getSightings());
+      model.put("animals", Animals.all());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting-success.vtl");
       return new ModelAndView(model, layout);
@@ -93,8 +92,7 @@ public class App {
     get("/animals/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Animals animalId = Animals.find(Integer.parseInt(request.params(":id")));
-      // Sightings sightingId = Sightings.find(Integer.parseInt(request.queryParams("sighting")));
-      // model.put("sighting", sightingId);
+      model.put("sighting", Sightings.all());
       model.put("animal", animalId);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal.vtl");
@@ -116,9 +114,7 @@ public class App {
     post("/animals/:id/delete", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Animals animalId = Animals.find(Integer.parseInt(request.params(":id")));
-      // Sightings sighting = Sightings.find(animalId.getId());
       animalId.delete();
-      // animalId.leaveSightings(sighting);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-delete.vtl");
       return new ModelAndView(model, layout);
@@ -134,6 +130,7 @@ public class App {
       EndangeredAnimals newAnimal = new EndangeredAnimals(animalName, health, age, amount);
       newAnimal.save();
       // newAnimal.getSightings(sighting);
+      model.put("endangered-animals", EndangeredAnimals.all());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-success.vtl");
       return new ModelAndView(model, layout);
@@ -153,7 +150,7 @@ public class App {
       EndangeredAnimals animalId = EndangeredAnimals.find(Integer.parseInt(request.params(":id")));
       String animalName = request.queryParams("endangered-animal-name");
       String health = request.queryParams("health");
-      String age = request.queryParams("endangered-animal-age");
+      String age = request.queryParams("animal-age");
       EndangeredAnimals newAnimal = EndangeredAnimals.find(animalId.getId());
       animalId.update(animalName, health, age);
       model.put("header", "templates/header.vtl");
@@ -164,9 +161,7 @@ public class App {
     post("/endangered-animals/:id/delete", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       EndangeredAnimals animal = EndangeredAnimals.find(Integer.parseInt(request.params(":id")));
-      // Sightings sighting = Sightings.find(animalId.getId());
       animal.delete();
-      // animalId.leaveSightings(sighting);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-delete.vtl");
       return new ModelAndView(model, layout);

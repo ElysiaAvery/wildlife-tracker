@@ -25,15 +25,15 @@ A web app to be used by a hypothetical forest service to aid in the tracking of 
   * Start psql: `$ psql`
   * Create database: `# CREATE DATABASE wildlife_tracker;`
 * In your third terminal window:
-  * Clone this repository to your desktop: `$ cd Desktop; git clone https://github.com/elysiaavery/forest-service`
-  * Navigate to the forest-service directory: `$ cd forest-service`
+  * Clone this repository to your desktop: `$ cd Desktop; git clone https://github.com/elysiaavery/wildlife_tracker`
+  * Navigate to the forest-service directory: `$ cd wildlife_tracker`
   * Create database schema from wildlife_tracker.sql: `$ psql wildlife_tracker < wildlife_tracker.sql`
 * Back in your second terminal window:
   * Confirm the database has been restored correctly:
     * Connect to wildlife_tracker database: `# \c wildlife_tracker;`
     * Print out database tables: `# \dt;`
     <br>
-    NOTE: You should see `animals` and `sightings` tables in the `recipe_box` database.
+    NOTE: You should see `animals` and `sightings` tables in the `wildlife_tracker` database.
 * Back in your third terminal window:
   * Run the server: `$ gradle run`
 * In the browser of your choosing, navigate to "localhost:4567" (tested in Chrome).

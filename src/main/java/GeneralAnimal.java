@@ -5,11 +5,16 @@ import java.sql.Timestamp;
 public abstract class GeneralAnimal {
   public String name;
   public String type;
+  public String age;
   public int id;
 
 
   public String getName() {
     return name;
+  }
+
+  public String getAge() {
+    return age;
   }
 
   public int getId() {
@@ -28,10 +33,11 @@ public abstract class GeneralAnimal {
 
   public void save() {
     try (Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO general_animals (name, type) VALUES (:name, :type)";
+      String sql = "INSERT INTO general_animals (name, type, age) VALUES (:name, :type, :age)";
       this.id = (int) con.createQuery(sql, true)
                          .addParameter("name", this.name)
                          .addParameter("type", this.type)
+                         .addParameter("age", this.age)
                          .executeUpdate()
                          .getKey();
     }

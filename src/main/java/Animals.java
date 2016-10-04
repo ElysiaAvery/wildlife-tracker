@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 public class Animals extends GeneralAnimal implements DatabaseManagement {
   public static final String DATABASE_TYPE = "animal";
-  private String age;
   public static final String NEWBORN = "newborn";
   public static final String YOUNG = "young";
   public static final String ADULT = "adult";
@@ -13,10 +12,6 @@ public class Animals extends GeneralAnimal implements DatabaseManagement {
     this.name = name;
     this.age = age;
     type = DATABASE_TYPE;
-  }
-
-  public String getAge() {
-    return age;
   }
 
   public void setAge(String age) {

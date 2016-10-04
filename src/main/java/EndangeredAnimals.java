@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 public class EndangeredAnimals extends GeneralAnimal implements DatabaseManagement {
   private String health;
-  private String age;
   private int amount;
   public static final String NEWBORN = "newborn";
   public static final String YOUNG = "young";
@@ -23,10 +22,6 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
 
   public String getHealth() {
     return health;
-  }
-
-  public String getAge() {
-    return age;
   }
 
   public int getAmount() {
@@ -65,20 +60,20 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
     }
   }
 
-  // @Override
-  // public void save() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "INSERT INTO general_animals (type, name, health, age, amount) VALUES ('endangered', :name, :health, :age, :amount)";
-  //     this.id = (int) con.createQuery(sql, true)
-  //       .addParameter("name", this.name)
-  //       .addParameter("health", this.health)
-  //       .addParameter("age", this.age)
-  //       .addParameter("amount", this.amount)
-  //       .throwOnMappingFailure(false)
-  //       .executeUpdate()
-  //       .getKey();
-  //   }
-  // }
+  @Override
+  public void save() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "INSERT INTO general_animals (type, name, health, age, amount) VALUES ('endangered', :name, :health, :age, :amount)";
+      this.id = (int) con.createQuery(sql, true)
+        .addParameter("name", this.name)
+        .addParameter("health", this.health)
+        .addParameter("age", this.age)
+        .addParameter("amount", this.amount)
+        .throwOnMappingFailure(false)
+        .executeUpdate()
+        .getKey();
+    }
+  }
 
   public void update(String name, String health, String age) {
     this.name = name;
@@ -125,7 +120,7 @@ public class EndangeredAnimals extends GeneralAnimal implements DatabaseManageme
       con.createQuery(sql)
       .addParameter("id", this.id)
       .executeUpdate();
-      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animals_id = :newid";
+      String joinDeleteQuery = "DELETE FROM animals_sightings WHERE general_animal_id = :newid";
       con.createQuery(joinDeleteQuery)
         .addParameter("newid", this.getId())
         .executeUpdate();

@@ -113,10 +113,10 @@ public class EndangeredAnimalsTest {
   }
 
   @Test
-  public void delete_deletesAllEndangeredAnimalssAndSightingsAssociations() {
+  public void delete_deletesAllEndangeredAnimalsAndSightingsAssociations() {
     Sightings testSightings = new Sightings("Quadrant A", "Naomi");
     testSightings.save();
-    EndangeredAnimals testEndangeredAnimals = new EndangeredAnimals("grey wolf","healthy", "young", 3);
+    EndangeredAnimals testEndangeredAnimals = new EndangeredAnimals("grey wolf", "healthy", "young", 3);
     testEndangeredAnimals.save();
     testSightings.addEndangeredAnimals(testEndangeredAnimals);
     testEndangeredAnimals.delete();
