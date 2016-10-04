@@ -1,3 +1,4 @@
 body {
-  background-color: green;
+  background: white url("/image/woods.jpeg") no-repeat fixed center;
+  font-family: 'Lora', serif;
 }
