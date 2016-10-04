@@ -14,9 +14,9 @@ public class Animals extends GeneralAnimal implements DatabaseManagement {
     type = DATABASE_TYPE;
   }
 
-  public void setAge(String age) {
-    this.age = age;
-  }
+  // public void setAge(String age) {
+  //   this.age = age;
+  // }
 
   public static List<Animals> all() {
     String sql = "SELECT * FROM general_animals WHERE type = 'animal';";

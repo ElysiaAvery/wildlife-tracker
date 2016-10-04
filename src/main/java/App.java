@@ -24,6 +24,8 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       String location = request.queryParams("location");
       String rangerName = request.queryParams("ranger_name");
+      Animals animal = Animals.find(Integer.parseInt(request.queryParams("animalId")));
+      EndangeredAnimals endangeredAnimal = EndangeredAnimals.find(Integer.parseInt(request.queryParams("endangered-animalId")));
       String url = String.format("/whoops");
       if(location.equals("") || rangerName.equals("")) {
         response.redirect(url);
@@ -31,6 +33,8 @@ public class App {
       }
       Sightings newSighting = new Sightings(location, rangerName);
       newSighting.save();
+      newSighting.addAnimals(animal);
+      newSighting.addEndangeredAnimals(endangeredAnimal);
       model.put("sightings", Sightings.all());
       model.put("spotted", newSighting.getSpotted());
       model.put("header", "templates/header.vtl");
@@ -38,12 +42,10 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    get("/sighting/:id", (request, response) -> {
+    get("/sightings/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Sightings sightingId = Sightings.find(Integer.parseInt(request.params(":id")));
       model.put("sighting", sightingId);
-      // model.put("animal", sightingId.getAnimals());
-      // model.put("endangered-animal", sightingId.getEndangeredAnimals());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/sighting.vtl");
       return new ModelAndView(model, layout);
@@ -92,7 +94,6 @@ public class App {
     get("/animals/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Animals animalId = Animals.find(Integer.parseInt(request.params(":id")));
-      model.put("sighting", Sightings.all());
       model.put("animal", animalId);
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal.vtl");
@@ -126,10 +127,8 @@ public class App {
       String health = request.queryParams("health");
       String age = request.queryParams("endangered-animal-age");
       int amount = Integer.parseInt(request.queryParams("amount"));
-      // Sightings sighting = Sightings.find(Integer.parseInt(request.queryParams("sightingId")));
       EndangeredAnimals newAnimal = new EndangeredAnimals(animalName, health, age, amount);
       newAnimal.save();
-      // newAnimal.getSightings(sighting);
       model.put("endangered-animals", EndangeredAnimals.all());
       model.put("header", "templates/header.vtl");
       model.put("template", "templates/animal-success.vtl");

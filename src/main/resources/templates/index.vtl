@@ -4,7 +4,7 @@
   <p>Click on a sighting to see animals that were present during that time.</p>
   <ul>
   #foreach ($sighting in $sightings)
-    <li><a href="/sighting/$sighting.getId()">$sighting.getLocation()</a></li>
+    <li><a href="/sightings/$sighting.getId()">$sighting.getLocation()</a></li>
   #end
   </ul>
 #else
